@@ -3,17 +3,31 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import {Button, Stack} from "react-bootstrap";
 import { useState } from "react";
 
-function NewIncome() {
+interface Props {
+    incomeAmount: string;
+    index: number;
+    handleIncomeChange: (index: number, amount: string) => void;
+}
+
+function NewIncome({incomeAmount, index, handleIncomeChange}: Props) {
     const [incomeName, setIncomeName] = useState("");
-    const [incomeAmount, setIncomeAmount] = useState("");
+
     return (
-        <Stack direction="horizontal" gap={3}>
-            <Form.Control className="me-auto" placeholder="Name of income e.g. 'Salary'" value={incomeName} onChange={(e) =>setIncomeName(e.target.value)}/>
-            <Form.Control className="me-auto" placeholder="Amount" value={incomeAmount} onChange={(e) => setIncomeAmount(e.target.value)} />
+        <Stack direction="horizontal" gap={3} className={"mb-2"}>
+            <Form.Control className="me-auto"
+                          placeholder="Name of income e.g. 'Salary'"
+                          value={incomeName}
+                          onChange={(e) =>setIncomeName(e.target.value)}
+            />
+            <Form.Control className="me-auto"
+                          placeholder="Amount"
+                          value={incomeAmount}
+                          onChange={(e) => handleIncomeChange(index, e.target.value)}
+            />
             <div className="vr" />
-            <Button variant="outline-danger" onClick={function(){setIncomeName(""); setIncomeAmount("")}}>Reset</Button>
+            <Button variant="outline-danger" onClick={function(){setIncomeName(""); handleIncomeChange(index, "")}}>Reset</Button>
         </Stack>
     );
 }
 
-export default NewIncome
+export default NewIncome;
