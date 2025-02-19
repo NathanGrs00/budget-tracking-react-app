@@ -1,33 +1,38 @@
-import Form from 'react-bootstrap/Form';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import {Button, Stack} from "react-bootstrap";
-import { useState } from "react";
+import {useState} from "react";
+import NewIncomeRow from "./NewIncomeRow.tsx";
 
-interface Props {
-    incomeAmount: string;
-    index: number;
-    handleIncomeChange: (index: number, amount: string) => void;
-}
+function NewIncome() {
 
-function NewIncome({incomeAmount, index, handleIncomeChange}: Props) {
-    const [incomeName, setIncomeName] = useState("");
+    const [rowAmount, setRowAmount] = useState(1);
+    const [incomeAmount, setIncomeAmount] = useState<string[]>([]);
+
+    const handleIncomeChange = (index: number, amount: string) => {
+        const updatedIncomes = [...incomeAmount];
+        updatedIncomes[index] = amount;
+        setIncomeAmount(updatedIncomes)
+    }
+
+    const totalIncome = incomeAmount.reduce(
+        (sum, amount) => sum + parseFloat(amount || "0"),
+        0
+    )
 
     return (
-        <Stack direction="horizontal" gap={3} className={"mb-2"}>
-            <Form.Control className="me-auto"
-                          placeholder="Name of income e.g. 'Salary'"
-                          value={incomeName}
-                          onChange={(e) =>setIncomeName(e.target.value)}
-            />
-            <Form.Control className="me-auto"
-                          placeholder="Amount"
-                          value={incomeAmount}
-                          onChange={(e) => handleIncomeChange(index, e.target.value)}
-            />
-            <div className="vr" />
-            <Button variant="outline-danger" onClick={function(){setIncomeName(""); handleIncomeChange(index, "")}}>Reset</Button>
-        </Stack>
-    );
+        <div className={"container p-5 mt-5 rounded-4"}>
+            <h2 className="mb-5">Enter your total income per month:</h2>
+            {[...Array(rowAmount)].map((_, index) => (
+                <NewIncomeRow handleIncomeChange={handleIncomeChange}
+                           key={index}
+                           index={index}
+                           incomeAmount={incomeAmount[index] || ""}
+                />
+            ))}
+            <p className="mt-5">Your total income is: {totalIncome} </p>
+            <button className="btn btn-primary me-3">Add total income</button>
+            <button className="btn btn-outline-primary"
+                    onClick={() => setRowAmount(prev => prev + 1)}>New row</button>
+        </div>
+    )
 }
 
 export default NewIncome;
