@@ -25,7 +25,7 @@ function BasicPie({allExpenses, totalIncome, totalExpenses}: Props) {
                     ]
                 },
             ]}
-            width={600}
+            width={1000}
             height={200}
         />
     );

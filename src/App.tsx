@@ -20,7 +20,7 @@ function App() {
     return (
         <>
             <NavBar handleNavigating={handleNavigating} />
-            {currentPage === "home" && <Homepage />}
+            {currentPage === "home" && <Homepage handleNavigating={handleNavigating} />}
             {currentPage === "new-income" && (
                 <NewIncome
                     income={income} setIncome={setIncome}

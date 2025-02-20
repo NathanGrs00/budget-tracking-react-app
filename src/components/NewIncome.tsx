@@ -40,7 +40,7 @@ function NewIncome({income, setIncome, totalIncome, setTotalIncome}: Props) {
     }, [calculatedTotalIncome, setTotalIncome]);
 
     return (
-        <div className={"container p-5 mt-5 rounded-4"}>
+        <div className={"container shadow p-5 mt-5 rounded-4"}>
             <h2 className="mb-5">Enter your total income per month:</h2>
             {[...Array(rowAmount)].map((_, index) => (
                 <NewIncomeRow handleIncomeChange={handleIncomeChange}

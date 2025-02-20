@@ -8,7 +8,6 @@ interface Props {
     setTotalExpenses: React.Dispatch<React.SetStateAction<number>>
 }
 
-
 function NewExpense({expenses, setExpenses, setTotalExpenses}: Props) {
 
     const [rowAmount, setRowAmount] = useState(1);
@@ -40,7 +39,7 @@ function NewExpense({expenses, setExpenses, setTotalExpenses}: Props) {
     }, [totalExpenses, setTotalExpenses]);
 
     return (
-        <div className={"container p-5 mt-5 rounded-4"}>
+        <div className={"container shadow p-5 mt-5 rounded-4"}>
             <h2 className="mb-5">Enter your total expenses per month:</h2>
             {[...Array(rowAmount)].map((_, index) => (
                 <NewExpenseRow handleExpenseChange={handleExpenseChange}
