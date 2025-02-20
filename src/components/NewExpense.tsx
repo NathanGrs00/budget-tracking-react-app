@@ -1,19 +1,28 @@
 import {useState} from "react";
 import NewExpenseRow from "./NewExpenseRow.tsx";
+import * as React from "react";
 
-function NewExpense() {
+interface Props {
+    expenses: { expenseName: string; expenseAmount: string }[];
+    setExpenses: React.Dispatch<React.SetStateAction<{ expenseName: string; expenseAmount: string }[]>>;
+}
+
+
+function NewExpense({expenses, setExpenses}: Props) {
 
     const [rowAmount, setRowAmount] = useState(1);
-    const [expenseAmount, setExpenseAmount] = useState<string[]>([]);
 
-    const handleExpenseChange = (index: number, amount: string) => {
-        const updatedExpenses = [...expenseAmount];
-        updatedExpenses[index] = amount;
-        setExpenseAmount(updatedExpenses)
+    const handleExpenseChange = (index: number, amount: string, name: string) => {
+        const updatedExpenses = [...expenses];
+        updatedExpenses[index] = {
+            expenseName: name,
+            expenseAmount: amount
+        };
+        setExpenses(updatedExpenses)
     }
 
-    const totalExpenses = expenseAmount.reduce(
-        (sum, amount) => sum + parseFloat(amount || "0"),
+    const totalExpenses = expenses.reduce(
+        (sum, expense) => sum + parseFloat(expense.expenseAmount || "0"),
         0
     )
 
@@ -24,12 +33,12 @@ function NewExpense() {
                 <NewExpenseRow handleExpenseChange={handleExpenseChange}
                               key={index}
                               index={index}
-                              expenseAmount={expenseAmount[index] || ""}
+                               expenseName={expenses[index]?.expenseName || ""}
+                              expenseAmount={expenses[index]?.expenseAmount || ""}
                 />
             ))}
             <p className="mt-5">Your total expenses are: {totalExpenses} </p>
-            <button className="btn btn-primary me-3">Add total expenses</button>
-            <button className="btn btn-outline-primary"
+            <button className="btn btn-primary"
                     onClick={() => setRowAmount(prev => prev + 1)}>New row</button>
         </div>
     )

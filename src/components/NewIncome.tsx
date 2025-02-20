@@ -28,8 +28,7 @@ function NewIncome() {
                 />
             ))}
             <p className="mt-5">Your total income is: {totalIncome} </p>
-            <button className="btn btn-primary me-3">Add total income</button>
-            <button className="btn btn-outline-primary"
+            <button className="btn btn-primary"
                     onClick={() => setRowAmount(prev => prev + 1)}>New row</button>
         </div>
     )
