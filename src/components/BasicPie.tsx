@@ -5,21 +5,28 @@ interface Props {
         expenseName: string;
         expenseAmount: string;
     }[];
+    totalIncome: number
+    totalExpenses: number
 }
 
-function BasicPie({allExpenses}: Props) {
+function BasicPie({allExpenses, totalIncome, totalExpenses}: Props) {
+    const remainingIncome = totalIncome - totalExpenses
     return (
         <PieChart
             series={[
                 {
-                    data: allExpenses.map((expense, index) => ({
-                            id: index,
+                    data: [
+                        { id: 0, value: remainingIncome, label: "Remaining Income" },
+                        ...allExpenses.map((expense, index) => ({
+                            id: index + 1,
                             value: parseFloat(expense.expenseAmount),
-                            label: expense.expenseName}
-                    ))
+                            label: expense.expenseName
+                        }))
+                    ]
+
                 },
             ]}
-            width={400}
+            width={600}
             height={200}
         />
     );

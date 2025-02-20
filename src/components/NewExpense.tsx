@@ -5,10 +5,11 @@ import * as React from "react";
 interface Props {
     expenses: { expenseName: string; expenseAmount: string }[];
     setExpenses: React.Dispatch<React.SetStateAction<{ expenseName: string; expenseAmount: string }[]>>;
+    setTotalExpenses: React.Dispatch<React.SetStateAction<number>>
 }
 
 
-function NewExpense({expenses, setExpenses}: Props) {
+function NewExpense({expenses, setExpenses, setTotalExpenses}: Props) {
 
     const [rowAmount, setRowAmount] = useState(1);
 
@@ -25,6 +26,10 @@ function NewExpense({expenses, setExpenses}: Props) {
         (sum, expense) => sum + parseFloat(expense.expenseAmount || "0"),
         0
     )
+
+    React.useEffect(() => {
+        setTotalExpenses(totalExpenses);
+    }, [expenses, setTotalExpenses]);
 
     return (
         <div className={"container p-5 mt-5 rounded-4"}>

@@ -1,7 +1,13 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import NewIncomeRow from "./NewIncomeRow.tsx";
+import * as React from "react";
 
-function NewIncome() {
+interface Props {
+    totalIncome: number
+    setTotalIncome: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function NewIncome({totalIncome, setTotalIncome}: Props) {
 
     const [rowAmount, setRowAmount] = useState(1);
     const [incomeAmount, setIncomeAmount] = useState<string[]>([]);
@@ -12,10 +18,14 @@ function NewIncome() {
         setIncomeAmount(updatedIncomes)
     }
 
-    const totalIncome = incomeAmount.reduce(
+    const calculatedTotalIncome = incomeAmount.reduce(
         (sum, amount) => sum + parseFloat(amount || "0"),
         0
     )
+
+    useEffect(() => {
+        setTotalIncome(calculatedTotalIncome);
+    }, [calculatedTotalIncome, setTotalIncome]);
 
     return (
         <div className={"container p-5 mt-5 rounded-4"}>
