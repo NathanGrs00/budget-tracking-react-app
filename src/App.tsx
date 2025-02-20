@@ -3,6 +3,7 @@ import "./App.css"
 import NavBar from "./components/NavBar.tsx";
 import Homepage from "./components/Homepage.tsx";
 import {useState} from "react";
+import NewExpense from "./components/NewExpense.tsx";
 
 function App() {
     const [currentPage, setCurrentPage] = useState("home");
@@ -16,6 +17,7 @@ function App() {
             <NavBar handleNavigating={handleNavigating} />
             {currentPage === "home" && <Homepage />}
             {currentPage === "new-income" && <NewIncome />}
+            {currentPage === "new-expenses" && <NewExpense />}
         </>
     )
 }
