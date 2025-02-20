@@ -23,7 +23,6 @@ function BasicPie({allExpenses, totalIncome, totalExpenses}: Props) {
                             label: expense.expenseName
                         }))
                     ]
-
                 },
             ]}
             width={600}

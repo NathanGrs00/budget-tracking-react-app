@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import NewExpenseRow from "./NewExpenseRow.tsx";
 import * as React from "react";
 
@@ -12,6 +12,14 @@ interface Props {
 function NewExpense({expenses, setExpenses, setTotalExpenses}: Props) {
 
     const [rowAmount, setRowAmount] = useState(1);
+
+    useEffect(() => {
+        if (expenses.length === 0) {
+            setRowAmount(1);
+        } else {
+            setRowAmount(expenses.length)
+        }
+    }, [expenses]);
 
     const handleExpenseChange = (index: number, amount: string, name: string) => {
         const updatedExpenses = [...expenses];
@@ -27,19 +35,19 @@ function NewExpense({expenses, setExpenses, setTotalExpenses}: Props) {
         0
     )
 
-    React.useEffect(() => {
+    useEffect(() => {
         setTotalExpenses(totalExpenses);
-    }, [expenses, setTotalExpenses]);
+    }, [totalExpenses, setTotalExpenses]);
 
     return (
         <div className={"container p-5 mt-5 rounded-4"}>
             <h2 className="mb-5">Enter your total expenses per month:</h2>
             {[...Array(rowAmount)].map((_, index) => (
                 <NewExpenseRow handleExpenseChange={handleExpenseChange}
-                              key={index}
-                              index={index}
-                               expenseName={expenses[index]?.expenseName || ""}
-                              expenseAmount={expenses[index]?.expenseAmount || ""}
+                               key={index}
+                               index={index}
+                                expenseName={expenses[index]?.expenseName || ""}
+                                expenseAmount={expenses[index]?.expenseAmount || ""}
                 />
             ))}
             <p className="mt-5">Your total expenses are: {totalExpenses} </p>
