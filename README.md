@@ -1,50 +1,131 @@
-# React + TypeScript + Vite
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/be627ab1-7152-4f92-90cd-286585fcf6a5" width="400" height="400"/>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Personal Budget Tool
 
-Currently, two official plugins are available:
+This application is a tool designed to track your spending, income and it visually shows you the remaining budget you have left each month.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## Expanding the ESLint configuration
+These instructions will get you to run the application in a local environment.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+The things you need before installing the software.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+* Git Bash, your IDE's terminal or the command prompt/terminal from your OS.
+
+### Installation
+
+A step by step guide that will tell you how to get the development environment up and running.
+
+Clone the repository using:
+```
+git clone https://github.com/NathanGrs00/budget-tracking-react-app.git
+```
+Navigate to the project in your terminal using:
+```
+cd budget-tracking-react-app
+```
+Run the following commands in the terminal:
+```
+npm install
+npm run dev
+```
+After running these commands, Vite will give you a localhost link to open in a browser.
+
+## Features
+
+- Add income
+- Add expenses
+- View a pie chart that displays your expenses and the remaining budget you have.
+
+## Usage
+Open the localhost page.
+
+Click on 'Start here' on the landing page.
+
+![Image](https://github.com/user-attachments/assets/0c2d3448-4d44-4236-8c09-208916616ed8)
+
+Fill in all your income for a month.
+
+![Image](https://github.com/user-attachments/assets/0f174a2b-94a0-48ab-8ca6-49d8a7def5b3)
+
+If you need more rows, you can click on the 'New row' button.
+
+After filling in all the rows, click on 'New expenses' in the navigation bar on the top of the screen.
+
+Fill in all the expenses you have each month.
+
+![Image](https://github.com/user-attachments/assets/cef86b32-7b06-448e-b742-aaaaffd040ed)
+
+Now you can view the pie-chart by navigating to 'Show budget' on the navigation bar.
+
+![Image](https://github.com/user-attachments/assets/8f511e70-5829-4c6b-899e-03243f5717a1)
+
+## Technologies Used
+
+* React
+* Vite
+* Typescript
+* Bootstrap
+
+## Contributing
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the repository.
+
+2. Create a new branch:
+
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+  git checkout -b feature-name
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
 ```
+
+3. Make your changes and commit:
+
+```
+
+  git commit -m "Add new feature"
+
+```
+4. Push to your fork:
+```
+
+  git push origin feature-name
+
+```
+5. Open a pull request.
+
+## Roadmap
+
+- [x] Function to add expenses and income.
+- [x] Showing piechart with remaining budget for a month.
+- [ ] Connect with a database to save user input when reloading the page.
+- [ ] Deploying the application.
+- [ ] Differentiate recurring expenses from non-recurring expenses.
+- [ ] Different elements to show budget information:
+    - [ ] Big title to make the remaining budget more clear.
+    - [ ] Saving information for a set month, and viewing average each month.
+
+See the [open issues](https://github.com/NathanGrs00/budget-tracking-react-app/issues) for a full list of proposed features (and known issues).
+
+## Contact
+
+Nathan - [@LinkedIn](https://www.linkedin.com/in/nathangeers/) - nathangeers2@gmail.com
+
+Project Link: [https://github.com/NathanGrs00/budget-tracking-react-app](https://github.com/NathanGrs00/budget-tracking-react-app)
+
+## License
+
+Distributed under the MIT license. See ```LICENSE.md``` for more information.
+
+
+
+
+
