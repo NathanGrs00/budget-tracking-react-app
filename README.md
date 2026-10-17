@@ -16,31 +16,40 @@ These instructions will get you to run the application in a local environment.
 
 The things you need before installing the software.
 
-* Git Bash, your IDE's terminal or the command prompt/terminal from your OS.
+- Git Bash, your IDE's terminal or the command prompt/terminal from your OS.
 
 ### Installation
 
 A step by step guide that will tell you how to get the development environment up and running.
 
 Clone the repository using:
+
 ```
 git clone https://github.com/NathanGrs00/budget-tracking-react-app.git
 ```
+
 Navigate to the project in your terminal using:
+
 ```
 cd budget-tracking-react-app
 ```
+
 Run the following commands in the terminal:
+
 ```
 npm install
 npm run dev
 ```
+
 After running these commands, Vite will give you a localhost link to open in a browser.
 
 Other useful commands:
+
 ```
-npm test        # run the tests
-npm run lint    # check code style
+npm test              # run the tests
+npm run lint          # check for code problems
+npm run format        # format the code with Prettier
+npm run typecheck     # check TypeScript types
 npm run build   # build the site into dist/
 ```
 
@@ -60,6 +69,7 @@ One-time setup: in the repository go to **Settings → Pages** and set **Source*
 - Export and import a backup file to move your data to another device.
 
 ## Usage
+
 Open the localhost page.
 
 Click on 'Start here' on the landing page. Use the arrows above each list to switch month.
@@ -86,16 +96,35 @@ Under 'History' you can compare months and see your averages. Under 'Settings' y
 
 ![Image](https://github.com/user-attachments/assets/8f511e70-5829-4c6b-899e-03243f5717a1)
 
+## Project Structure
+
+```
+src/
+├── main.tsx            Entry point
+├── App.tsx             Layout and page switching
+├── types.ts            Shared data types
+├── theme.ts            Chart colors
+├── components/         Reusable UI pieces (NavBar, MonthPicker, EntryList, StatCard)
+├── pages/              One component per page
+├── state/              Budget state: reducer, React context and provider (saves to localStorage)
+├── hooks/              useHashRoute (hash-based routing for GitHub Pages)
+└── lib/                Plain TypeScript logic, no React: budget math, months, money, storage, backup
+```
+
+Business logic lives in `lib/` and `state/budgetReducer.ts` as pure functions, so it is easy to test.
+Tests sit next to the file they test (`*.test.ts`).
+
 ## Technologies Used
 
-* React
-* Vite
-* Typescript
-* Bootstrap
-* MUI X Charts
-* Vitest + Testing Library
+- React
+- Vite
+- Typescript
+- Bootstrap
+- MUI X Charts
+- Vitest + Testing Library
 
 ## Contributing
+
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
@@ -118,12 +147,15 @@ Don't forget to give the project a star! Thanks again!
   git commit -m "Add new feature"
 
 ```
+
 4. Push to your fork:
+
 ```
 
   git push origin feature-name
 
 ```
+
 5. Open a pull request.
 
 ## Roadmap
@@ -134,8 +166,8 @@ Don't forget to give the project a star! Thanks again!
 - [x] Deploying the application (GitHub Pages).
 - [x] Differentiate recurring expenses from non-recurring expenses.
 - [x] Different elements to show budget information:
-    - [x] Big title to make the remaining budget more clear.
-    - [x] Saving information for a set month, and viewing average each month.
+  - [x] Big title to make the remaining budget more clear.
+  - [x] Saving information for a set month, and viewing average each month.
 
 See the [open issues](https://github.com/NathanGrs00/budget-tracking-react-app/issues) for a full list of proposed features (and known issues).
 
@@ -147,9 +179,4 @@ Project Link: [https://github.com/NathanGrs00/budget-tracking-react-app](https:/
 
 ## License
 
-Distributed under the MIT license. See ```LICENSE.md``` for more information.
-
-
-
-
-
+Distributed under the MIT license. See `LICENSE.md` for more information.

@@ -1,38 +1,55 @@
 import { PieChart } from "@mui/x-charts/PieChart";
-import type { AppData } from "../types.ts";
-import { formatMoney, formatMonth, getMonth, parseAmount, summarize } from "../lib/budget.ts";
+import { getMonth, summarize } from "../lib/budget.ts";
+import { formatMoney, parseAmount } from "../lib/money.ts";
+import { formatMonth } from "../lib/months.ts";
 import { href } from "../hooks/useHashRoute.ts";
+import { useBudget } from "../state/BudgetContext.ts";
+import { colors } from "../theme.ts";
 import MonthPicker from "../components/MonthPicker.tsx";
+import StatCard from "../components/StatCard.tsx";
 
-interface Props {
-    data: AppData;
-    month: string;
-    setMonth: (month: string) => void;
+interface Slice {
+    id: string;
+    label: string;
+    value: number;
+    color: string;
+    recurring: boolean;
 }
 
-const REMAINING_COLOR = "#2e9d5b";
-const PALETTE = ["#3b6fd8", "#e07b39", "#9b59b6", "#d64f6e", "#e0b22e", "#2bb3c0", "#7f8c8d", "#5c4bd1", "#b5651d", "#4caf50"];
-
-function BudgetPage({ data, month, setMonth }: Props) {
+function BudgetPage() {
+    const { data, month } = useBudget();
     const monthData = getMonth(data, month);
     const summary = summarize(month, monthData);
-    const money = (n: number) => formatMoney(n, data.currency);
+    const money = (value: number) => formatMoney(value, data.currency);
     const overBudget = summary.remaining < 0;
+    const isEmpty = summary.income === 0 && summary.expenses === 0;
 
-    const slices = monthData.expenses
-        .map((e, i) => ({ id: e.id, label: e.name.trim() || "Unnamed expense", value: parseAmount(e.amount), color: PALETTE[i % PALETTE.length], recurring: e.recurring }))
+    const slices: Slice[] = monthData.expenses
+        .map((e, i) => ({
+            id: e.id,
+            label: e.name.trim() || "Unnamed expense",
+            value: parseAmount(e.amount),
+            color: colors.series[i % colors.series.length],
+            recurring: e.recurring,
+        }))
         .filter((s) => s.value > 0);
     if (summary.remaining > 0) {
-        slices.unshift({ id: "remaining", label: "Remaining", value: summary.remaining, color: REMAINING_COLOR, recurring: false });
+        slices.unshift({
+            id: "remaining",
+            label: "Remaining",
+            value: summary.remaining,
+            color: colors.remaining,
+            recurring: false,
+        });
     }
     const chartTotal = slices.reduce((sum, s) => sum + s.value, 0);
 
     return (
         <section className="container card-panel shadow p-4 p-md-5 mt-5 rounded-4">
             <h1 className="h2 mb-4">Budget overview</h1>
-            <MonthPicker month={month} setMonth={setMonth} />
+            <MonthPicker />
 
-            {summary.income === 0 && summary.expenses === 0 ? (
+            {isEmpty ? (
                 <div className="text-center py-4">
                     <p className="lead">Nothing filled in for {formatMonth(month)} yet.</p>
                     <a className="btn btn-primary" href={href("income")}>
@@ -42,7 +59,9 @@ function BudgetPage({ data, month, setMonth }: Props) {
             ) : (
                 <>
                     <div className={`remaining-banner rounded-4 p-4 mb-4 text-center ${overBudget ? "over" : ""}`}>
-                        <div className="text-uppercase small fw-semibold">{overBudget ? "Over budget by" : "Left to spend"}</div>
+                        <div className="text-uppercase small fw-semibold">
+                            {overBudget ? "Over budget by" : "Left to spend"}
+                        </div>
                         <div className="display-4 fw-bold" data-testid="remaining">
                             {money(Math.abs(summary.remaining))}
                         </div>
@@ -57,7 +76,12 @@ function BudgetPage({ data, month, setMonth }: Props) {
                                 <PieChart
                                     series={[
                                         {
-                                            data: slices.map(({ id, label, value, color }) => ({ id, label, value, color })),
+                                            data: slices.map(({ id, label, value, color }) => ({
+                                                id,
+                                                label,
+                                                value,
+                                                color,
+                                            })),
                                             innerRadius: 50,
                                             paddingAngle: 1,
                                             cornerRadius: 4,
@@ -75,17 +99,27 @@ function BudgetPage({ data, month, setMonth }: Props) {
                                 <thead>
                                     <tr>
                                         <th scope="col">Item</th>
-                                        <th scope="col" className="text-end">Amount</th>
-                                        <th scope="col" className="text-end">Share</th>
+                                        <th scope="col" className="text-end">
+                                            Amount
+                                        </th>
+                                        <th scope="col" className="text-end">
+                                            Share
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {slices.map((s) => (
                                         <tr key={s.id}>
                                             <td>
-                                                <span className="swatch" style={{ background: s.color }} aria-hidden="true" />
+                                                <span
+                                                    className="swatch"
+                                                    style={{ background: s.color }}
+                                                    aria-hidden="true"
+                                                />
                                                 {s.label}
-                                                {s.recurring && <span className="badge text-bg-light border ms-2">monthly</span>}
+                                                {s.recurring && (
+                                                    <span className="badge text-bg-light border ms-2">monthly</span>
+                                                )}
                                             </td>
                                             <td className="text-end">{money(s.value)}</td>
                                             <td className="text-end">{Math.round((s.value / chartTotal) * 100)}%</td>
@@ -97,24 +131,13 @@ function BudgetPage({ data, month, setMonth }: Props) {
                     </div>
 
                     <div className="row g-3 mt-3">
-                        <Stat label="Income" value={money(summary.income)} />
-                        <Stat label="Recurring expenses" value={money(summary.recurringExpenses)} />
-                        <Stat label="One-off expenses" value={money(summary.oneOffExpenses)} />
+                        <StatCard label="Income" value={money(summary.income)} />
+                        <StatCard label="Recurring expenses" value={money(summary.recurringExpenses)} />
+                        <StatCard label="One-off expenses" value={money(summary.oneOffExpenses)} />
                     </div>
                 </>
             )}
         </section>
-    );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="col-12 col-sm-4">
-            <div className="border rounded-3 p-3 h-100 bg-body">
-                <div className="small text-body-secondary">{label}</div>
-                <div className="fs-5 fw-semibold">{value}</div>
-            </div>
-        </div>
     );
 }
 

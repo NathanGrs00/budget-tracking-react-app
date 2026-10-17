@@ -22,7 +22,11 @@ function NavBar({ currentPage }: Props) {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary shadow">
             <div className="container-fluid">
-                <a className="navbar-brand d-flex align-items-center fw-bold" href={href("home")} onClick={() => setCollapsed(true)}>
+                <a
+                    className="navbar-brand d-flex align-items-center fw-bold"
+                    href={href("home")}
+                    onClick={() => setCollapsed(true)}
+                >
                     <img className="me-2" alt="" src={mainLogo} width={48} height={48} />
                     Personal Budget Tool
                 </a>

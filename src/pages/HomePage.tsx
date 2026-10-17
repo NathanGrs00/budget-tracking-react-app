@@ -1,7 +1,7 @@
 import chartPicture from "../assets/chart-picture.png";
 import { href } from "../hooks/useHashRoute.ts";
 
-function Homepage() {
+function HomePage() {
     return (
         <section className="container card-panel rounded-4 shadow mt-5 p-0 d-flex flex-column flex-lg-row align-items-center overflow-hidden">
             <div className="flex-grow-1 p-4 p-md-5 text-center text-lg-start">
@@ -20,10 +20,14 @@ function Homepage() {
                 </a>
             </div>
             <div className="hero-image w-100">
-                <img src={chartPicture} alt="Example pie chart of a monthly budget" className="img-fluid w-100 d-block" />
+                <img
+                    src={chartPicture}
+                    alt="Example pie chart of a monthly budget"
+                    className="img-fluid w-100 d-block"
+                />
             </div>
         </section>
     );
 }
 
-export default Homepage;
+export default HomePage;

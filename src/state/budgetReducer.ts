@@ -1,9 +1,7 @@
-import { useEffect, useReducer } from "react";
 import type { AppData, Entry, EntryKind, MonthData } from "../types.ts";
 import { emptyData, getMonth, newEntry } from "../lib/budget.ts";
-import { loadData, saveData } from "../lib/storage.ts";
 
-export type Action =
+export type BudgetAction =
     | { type: "addEntry"; month: string; kind: EntryKind }
     | { type: "updateEntry"; month: string; kind: EntryKind; id: string; changes: Partial<Omit<Entry, "id">> }
     | { type: "removeEntry"; month: string; kind: EntryKind; id: string }
@@ -11,11 +9,11 @@ export type Action =
     | { type: "replaceAll"; data: AppData }
     | { type: "resetAll" };
 
-function updateMonth(state: AppData, key: string, fn: (m: MonthData) => MonthData): AppData {
-    return { ...state, months: { ...state.months, [key]: fn(getMonth(state, key)) } };
+function updateMonth(state: AppData, key: string, update: (month: MonthData) => MonthData): AppData {
+    return { ...state, months: { ...state.months, [key]: update(getMonth(state, key)) } };
 }
 
-export function reducer(state: AppData, action: Action): AppData {
+export function budgetReducer(state: AppData, action: BudgetAction): AppData {
     switch (action.type) {
         case "addEntry":
             return updateMonth(state, action.month, (m) => ({
@@ -39,14 +37,4 @@ export function reducer(state: AppData, action: Action): AppData {
         case "resetAll":
             return emptyData();
     }
-}
-
-export function useBudgetStore() {
-    const [data, dispatch] = useReducer(reducer, undefined, loadData);
-
-    useEffect(() => {
-        saveData(data);
-    }, [data]);
-
-    return [data, dispatch] as const;
 }

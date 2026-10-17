@@ -1,5 +1,7 @@
 import type { AppData, Entry, MonthData } from "../types.ts";
-import { DEFAULT_CURRENCY, emptyData, newId } from "./budget.ts";
+import { emptyData, newId } from "./budget.ts";
+import { DEFAULT_CURRENCY } from "./money.ts";
+import { isMonthKey } from "./months.ts";
 
 export const STORAGE_KEY = "budget-tracker:v1";
 
@@ -26,7 +28,7 @@ export function parseData(raw: unknown): AppData {
 
     const months: Record<string, MonthData> = {};
     for (const [key, month] of Object.entries(r.months as Record<string, unknown>)) {
-        if (!/^\d{4}-\d{2}$/.test(key) || typeof month !== "object" || month === null) continue;
+        if (!isMonthKey(key) || typeof month !== "object" || month === null) continue;
         const m = month as Record<string, unknown>;
         months[key] = { income: toEntries(m.income), expenses: toEntries(m.expenses) };
     }

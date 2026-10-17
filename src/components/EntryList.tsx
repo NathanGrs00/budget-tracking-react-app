@@ -1,13 +1,10 @@
 import type { Entry, EntryKind } from "../types.ts";
-import type { Action } from "../hooks/useBudgetStore.ts";
-import { formatMoney, sumEntries } from "../lib/budget.ts";
+import { getMonth, sumEntries } from "../lib/budget.ts";
+import { formatMoney } from "../lib/money.ts";
+import { useBudget } from "../state/BudgetContext.ts";
 
 interface Props {
     kind: EntryKind;
-    month: string;
-    entries: Entry[];
-    currency: string;
-    dispatch: (action: Action) => void;
 }
 
 const COPY: Record<EntryKind, { singular: string; plural: string; placeholder: string }> = {
@@ -15,7 +12,10 @@ const COPY: Record<EntryKind, { singular: string; plural: string; placeholder: s
     expenses: { singular: "expense", plural: "expenses", placeholder: "e.g. Rent" },
 };
 
-function EntryList({ kind, month, entries, currency, dispatch }: Props) {
+function EntryList({ kind }: Props) {
+    const { data, dispatch, month } = useBudget();
+    const { currency } = data;
+    const entries = getMonth(data, month)[kind];
     const { singular, plural, placeholder } = COPY[kind];
     const update = (id: string, changes: Partial<Omit<Entry, "id">>) =>
         dispatch({ type: "updateEntry", month, kind, id, changes });
@@ -80,7 +80,11 @@ function EntryList({ kind, month, entries, currency, dispatch }: Props) {
                 </div>
             ))}
 
-            <button type="button" className="btn btn-primary mt-3" onClick={() => dispatch({ type: "addEntry", month, kind })}>
+            <button
+                type="button"
+                className="btn btn-primary mt-3"
+                onClick={() => dispatch({ type: "addEntry", month, kind })}
+            >
                 + Add {singular}
             </button>
 
