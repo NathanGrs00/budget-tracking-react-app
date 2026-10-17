@@ -1,47 +1,40 @@
 import { useState } from "react";
-import NewIncome from "./components/NewIncome.tsx";
 import NavBar from "./components/NavBar.tsx";
-import Homepage from "./components/Homepage.tsx";
-import NewExpense from "./components/NewExpense.tsx";
-import ShowBudget from "./components/ShowBudget.tsx";
-import "./App.css";
+import Homepage from "./pages/Homepage.tsx";
+import EntriesPage from "./pages/EntriesPage.tsx";
+import BudgetPage from "./pages/BudgetPage.tsx";
+import HistoryPage from "./pages/HistoryPage.tsx";
+import SettingsPage from "./pages/SettingsPage.tsx";
+import { useBudgetStore } from "./hooks/useBudgetStore.ts";
+import { useHashRoute } from "./hooks/useHashRoute.ts";
+import { currentMonthKey } from "./lib/budget.ts";
 
 function App() {
-    const [currentPage, setCurrentPage] = useState("home");
-    const [expenses, setExpenses] = useState<{ expenseName: string; expenseAmount: string }[]>([]);
-    const [income, setIncome] = useState<{incomeName: string; incomeAmount: string}[]>([]);
-    const [totalIncome, setTotalIncome] = useState<number>(0);
-    const [totalExpenses, setTotalExpenses] = useState<number>(0);
+    const [page, navigate] = useHashRoute();
+    const [data, dispatch] = useBudgetStore();
+    const [month, setMonth] = useState(currentMonthKey);
 
-    const handleNavigating = (link: string) => {
-        setCurrentPage(link);
-    };
+    const monthProps = { data, month, setMonth };
 
     return (
         <>
-            <NavBar handleNavigating={handleNavigating} />
-            {currentPage === "home" && <Homepage handleNavigating={handleNavigating} />}
-            {currentPage === "new-income" && (
-                <NewIncome
-                    income={income} setIncome={setIncome}
-                    totalIncome={totalIncome}
-                    setTotalIncome={setTotalIncome}
-                />
-            )}
-            {currentPage === "new-expenses" && (
-                <NewExpense
-                    expenses={expenses}
-                    setExpenses={setExpenses}
-                    setTotalExpenses={setTotalExpenses}
-                />
-            )}
-            {currentPage === "show-budget" && (
-                <ShowBudget
-                    allExpenses={expenses}
-                    totalIncome={totalIncome}
-                    totalExpenses={totalExpenses}
-                />
-            )}
+            <NavBar currentPage={page} />
+            <main className="pb-5 px-2">
+                {page === "home" && <Homepage />}
+                {page === "income" && <EntriesPage kind="income" dispatch={dispatch} {...monthProps} />}
+                {page === "expenses" && <EntriesPage kind="expenses" dispatch={dispatch} {...monthProps} />}
+                {page === "budget" && <BudgetPage {...monthProps} />}
+                {page === "history" && (
+                    <HistoryPage
+                        data={data}
+                        openMonth={(m) => {
+                            setMonth(m);
+                            navigate("budget");
+                        }}
+                    />
+                )}
+                {page === "settings" && <SettingsPage data={data} dispatch={dispatch} />}
+            </main>
         </>
     );
 }
